@@ -234,6 +234,7 @@ This year, I also reviewed pull requests from other contributors. I learned how 
 
 To make JabRef work with GraalVM Native Image, I had to understand what happens below the application-code level. I strengthened my knowledge of Java runtime behavior and native interoperability. This knowledge includes reflection, resource loading, JNI, native libraries, threads and environment-dependent behavior.
 
+- **How to explore a solution.** There was no ready-made solution for JabRef. I first studied prior art and built the smallest complete path. I then changed one factor at a time and compared the native result with the JVM result. I kept each confirmed result as metadata, a test or documentation.
 - **Silent failures.** Missing Native Image metadata does not always cause an error. A feature can instead show no content or do nothing. These failures are difficult to detect.
 - **Scope of metadata.** Metadata can register code and resources that Native Image cannot find. It cannot solve problems with native library loading, threads or the execution environment. These problems require different solutions.
 - **Tracing agent coverage.** The tracing agent records only the code paths that run during tracing. I generated metadata from the source code where possible. This method does not depend on one tracing run.
