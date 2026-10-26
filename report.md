@@ -41,7 +41,7 @@ Highlights:
 
 - Added a shared Gradle plugin for native image builds.
 - Added the bootstrap metadata. With it, the native JabKit starts and shows `--help`.
-- Added a [clitest](https://github.com/aureliojargas/clitest) smoke test and a CI workflow that runs it.
+- Added a [clitest](https://github.com/aureliojargas/clitest) smoke test for verification nd a CI workflow that runs the graalvm jabkit binary
 
 ##### [#15959](https://github.com/JabRef/jabref/pull/15959) - Add native image support for `check consistency` and `check integrity`
 
