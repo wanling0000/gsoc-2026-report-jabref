@@ -185,8 +185,6 @@ Measures the startup time and size of each JabKit distribution, and of 29 JDK 25
 | jpackage portable       | 4.298 ± 0.424 s |  194 MiB |              250 MiB |
 | JBang (`jabkit@jabref`) | 5.280 ± 0.426 s |      N/A |              437 MiB |
 
-The native image uses most of its 2.1 seconds for the initialization of JabKit itself. Thus, a faster startup now needs changes in the JabKit code.
-
 #### [jabref-native-env](https://github.com/wanling0000/jabref-native-env)
 
 This repository provides one-shot provisioning of Linux VMs for building and testing selected JabRef native image modules. It installs only the required toolchain and system libraries and includes cloud-init user data for fresh VMs.
