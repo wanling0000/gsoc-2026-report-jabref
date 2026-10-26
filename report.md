@@ -22,12 +22,12 @@ In a [benchmark](https://github.com/wanling0000/jabkit-startup-benchmark) on a L
 
 ### Deliverable status
 
-| Application | Native build | Native smoke test                                            | Packaged for users |
-| :---------- | :----------- | :----------------------------------------------------------- | :----------------- |
-| JabKit      | Merged       | Linux and macOS                                              | Yes                |
-| JabLS       | Merged       | LSP session                                                  | Not yet            |
-| JabSrv      | Merged       | HTTP API                                                     | Not yet            |
-| JabGui      | Merged       | Open ([#17545](https://github.com/JabRef/jabref/pull/17545)) | Not yet            |
+| Application | Native build | Smoke-test status                                                        | Packaging     |
+| :---------- | :----------- | :----------------------------------------------------------------------- | :------------ |
+| JabKit      | Merged       | Merged, Linux and macOS                                                   | Available     |
+| JabLS       | Merged       | Merged, LSP session                                                       | Not available |
+| JabSrv      | Merged       | Merged, HTTP API                                                          | Not available |
+| JabGui      | Merged       | Open ([#17545](https://github.com/JabRef/jabref/pull/17545))             | Not available |
 
 ## Contributions to JabRef
 
@@ -243,7 +243,7 @@ To make JabRef work with GraalVM Native Image, I had to understand what happens 
 
 ### Working with AI tools
 
-I used AI tools to read large logs and source code, and to draft changes. I verified each result myself. AI tools make changes faster than a person can review them. How contributors and maintainers should handle this is an open question for me.
+I used AI tools to read large logs and source code, and to draft changes. I verified each result myself. AI tools can produce drafts faster than a person can review and validate them. How contributors and maintainers should handle this is an open question for me.
 
 ## Thanks
 
