@@ -22,12 +22,12 @@ In a [benchmark](https://github.com/wanling0000/jabkit-startup-benchmark) on a L
 
 ### Deliverable status
 
-| Application | Native build | Smoke-test status                                                        | Packaging     |
-| :---------- | :----------- | :----------------------------------------------------------------------- | :------------ |
-| JabKit      | Merged       | Merged, Linux and macOS                                                   | Available     |
-| JabLS       | Merged       | Merged, LSP session                                                       | Not available |
-| JabSrv      | Merged       | Merged, HTTP API                                                          | Not available |
-| JabGui      | Merged       | Open ([#17545](https://github.com/JabRef/jabref/pull/17545))             | Not available |
+| Application | Native build | Smoke-test status                                            | Packaging     |
+| :---------- | :----------- | :----------------------------------------------------------- | :------------ |
+| JabKit      | Merged       | Merged, Linux and macOS                                      | Available     |
+| JabLS       | Merged       | Merged, LSP session                                          | Not available |
+| JabSrv      | Merged       | Merged, HTTP API                                             | Not available |
+| JabGui      | Merged       | Open ([#17545](https://github.com/JabRef/jabref/pull/17545)) | Not available |
 
 ## Contributions to JabRef
 
@@ -41,7 +41,7 @@ Highlights:
 
 - Added a shared Gradle plugin for native image builds.
 - Added the bootstrap metadata. With it, the native JabKit starts and shows `--help`.
-- Added a [clitest](https://github.com/aureliojargas/clitest) smoke test for verification nd a CI workflow that runs the graalvm jabkit binary
+- Added a [clitest](https://github.com/aureliojargas/clitest) smoke test for verification, and a CI workflow that runs it against the JabKit binary built with GraalVM.
 
 ##### [#15959](https://github.com/JabRef/jabref/pull/15959) - Add native image support for `check consistency` and `check integrity`
 
