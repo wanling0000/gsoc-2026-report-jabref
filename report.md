@@ -14,11 +14,11 @@
 
 ## Project summary
 
-JabRef ships four user-facing applications built on the shared JabLib core: JabKit (command-line tool), JabLS (language server), JabSrv (HTTP server) and JabGui (the GUI). The main motivation was JabKit. Before this project, it was distributed through jpackage and JBang. Both run it on a JVM, and their startup time makes short command-line operations slow. [GraalVM Native Image](https://www.graalvm.org/latest/reference-manual/native-image/) compiles a Java application ahead of time into a standalone executable that starts faster.
+JabRef is comprehensive literature management software. Besides the desktop application (JabGui), it offers a command-line tool (JabKit), an HTTP server (JabSrv) and a language server for text editors (JabLS). All four share the core library JabLib. The main motivation was JabKit. Before this project, JabKit was available as a `jpackage` build and through JBang. Both run it on a JVM, and their startup time makes short command-line operations slow. [GraalVM Native Image](https://www.graalvm.org/latest/reference-manual/native-image/) compiles a Java application ahead of time into a standalone executable that starts faster.
 
-This project added native image builds for all four applications. Most problems appeared only after a successful build, when the binary ran. Native Image includes only code that it can find at build time by following method calls. It can miss code invoked in other ways, such as classes that frameworks load by name or Java methods called from native AWT and JavaFX code. Some of these gaps cause silent failures. The project filled them with metadata, generated from the code where possible. Smoke tests run the real binaries in CI to detect new gaps.
+This project added native image builds for all four applications. Native Image includes only code that it can find at build time by following method calls. It can miss code invoked in other ways, such as classes that frameworks load by name or Java methods called from native AWT and JavaFX code. These classes also differ per operating system, so a binary that works on one system can fail on another. Some of these gaps cause silent failures. As a result, most problems appeared only after a successful build, when the binary ran. The project filled them with metadata, generated from the code where possible. Smoke tests run the real binaries in CI to detect new gaps.
 
-In a [benchmark](https://github.com/wanling0000/jabkit-startup-benchmark) on a Linux VM, the native `jabkit --help` took 2.1 seconds, and the JVM distributions took 4.0 to 5.3 seconds. The native download is 51 MiB, and the jpackage portable download is 194 MiB.
+In a [benchmark](https://github.com/wanling0000/jabkit-startup-benchmark) on a Linux VM, the native `jabkit --help` took 2.1 seconds, and the JVM distributions took 4.0 to 5.3 seconds. The native download is 51 MiB, and the `jpackage` portable download is 194 MiB.
 
 ### Deliverable status
 
@@ -78,7 +78,7 @@ Highlights:
 Highlights:
 
 - `search`: Added the missing Caffeine metadata. The GraalVM metadata repository does not have these entries.
-- `pdf update`: PDFBox loads the AWT native library. On Linux, this library calls back into Java through JNI, and GraalVM CE has no metadata for these calls. Changed the toolchain to [Liberica NIK](https://bell-sw.com/liberica-native-image-kit/) Full. It supplies AWT support, so the command works on Linux.
+- `pdf update`: PDFBox loads the AWT native library. On Linux, this library calls back into Java through JNI, and GraalVM CE has no metadata for these calls. Changed the toolchain to [Liberica NIK Full](https://bell-sw.com/liberica-native-image-kit/). It supplies AWT support, so the command works on Linux.
 
 ##### [#16144](https://github.com/JabRef/jabref/pull/16144) - Register Caffeine `weakKeys` cache classes for native image
 
@@ -96,7 +96,7 @@ Highlights:
 
 Highlights:
 
-- Documented that the JabKit features without AWT work without the bundled `.so` files.
+- Documented that only the JabKit commands that use AWT need the bundled `.so` files.
 
 #### JabLS
 
@@ -161,15 +161,15 @@ Highlights:
 
 ### Outside core scope
 
-- [#16422](https://github.com/JabRef/jabref/pull/16422) - Fix build after SvgNode 2.0 upgrade
-- [#16024](https://github.com/JabRef/jabref/pull/16024) - Fix `pdf` subcommand hint: remove non-existent `write-xmp` subcommand
-- Issue [#16087](https://github.com/JabRef/jabref/issues/16087) - `jabkit pdf update --format=xmp` reports success but does not modify existing PDFs (found while testing native `pdf update`)
+- [#16422](https://github.com/JabRef/jabref/pull/16422) - Fix build after SvgNode 2.0 upgrade.
+- [#16024](https://github.com/JabRef/jabref/pull/16024) - Fix `pdf` subcommand hint: remove non-existent `write-xmp` subcommand.
+- Issue [#16087](https://github.com/JabRef/jabref/issues/16087) - `jabkit pdf update --format=xmp` reports success but does not modify existing PDFs (found while testing native `pdf update`).
 
 ### Upstream contributions
 
 - PDFBox: `PDDocument` static AWT warm-up fails hard when AWT native libs are unavailable (GraalVM native image). Reported on the [PDFBox users mailing list](https://lists.apache.org/thread/dkvct72z2ltjy1cm73z7x23jyfjrnkxj) with a suggested fix; the maintainer opened the issues and applied the suggestions:
-  - [PDFBOX-6214](https://issues.apache.org/jira/browse/PDFBOX-6214) - catch `UnsatisfiedLinkError` (fixed in 2.0.37, 3.0.8)
-  - [PDFBOX-6219](https://issues.apache.org/jira/browse/PDFBOX-6219) - follow-up for Linux, catch `NoClassDefFoundError` (fixed in 2.0.38, 3.0.9, 4.0.0)
+  - [PDFBOX-6214](https://issues.apache.org/jira/browse/PDFBOX-6214) - catch `UnsatisfiedLinkError` (fixed in 2.0.37, 3.0.8).
+  - [PDFBOX-6219](https://issues.apache.org/jira/browse/PDFBOX-6219) - follow-up for Linux, catch `NoClassDefFoundError` (fixed in 2.0.38, 3.0.9, 4.0.0).
 - Comment on [bell-sw/LibericaNIK#38](https://github.com/bell-sw/LibericaNIK/issues/38) - `libawt_lwawt.dylib` cannot be loaded on macOS. I linked the root cause to [oracle/graal#13272](https://github.com/oracle/graal/issues/13272), confirmed with a GraalVM CE nightly build that the fix works for PDFBox on macOS, and asked when Liberica NIK will include it.
 
 ### Tools and repositories developed during GSoC
@@ -182,7 +182,7 @@ Measures the startup time and size of each JabKit distribution, and of 29 JDK 25
 | :---------------------- | --------------: | -------: | -------------------: |
 | Native image            | 2.139 ± 0.207 s |   51 MiB |              136 MiB |
 | `java -jar` (JDK 25)    | 4.017 ± 0.321 s |  113 MiB |      113 MiB + a JDK |
-| jpackage portable       | 4.298 ± 0.424 s |  194 MiB |              250 MiB |
+| `jpackage` portable     | 4.298 ± 0.424 s |  194 MiB |              250 MiB |
 | JBang (`jabkit@jabref`) | 5.280 ± 0.426 s |      N/A |              437 MiB |
 
 #### [jabref-native-env](https://github.com/wanling0000/jabref-native-env)
@@ -198,25 +198,25 @@ Experiments from before GSoC (March 2026). Each branch tests if one JabLib depen
 ### Toolchain and platforms
 
 - Move JabKit and JabSrv from Liberica NIK to GraalVM CE, as in JabGui. JabKit needs trimmed AWT JNI metadata for `pdf update` on Linux. JabSrv can use StaticFX for the CAYW picker.
-- Add Windows to the upstream CI. The JabGui smoke test already passes on Windows in my fork.
-- Publish native binaries of JabLS, JabSrv and JabGui. At the moment, only JabKit is packaged.
-- Remove AWT from JabGui: [JabRef/jabref-koppor#764](https://github.com/JabRef/jabref-koppor/issues/764), draft [JabRef/jabref-koppor#786](https://github.com/JabRef/jabref-koppor/pull/786).
+- Add Windows to the native image smoke tests in the upstream CI.
+- Package native binaries of JabLS, JabSrv and JabGui. At the moment, only JabKit is packaged.
+- Remove AWT from JabGui. AWT needs JNI metadata for each operating system (see [`pdf update`](#16060---native-image-support-for-search-and-pdf-update)). JabGui still uses AWT for the clipboard and `java.awt.Desktop`: [JabRef/jabref-koppor#764](https://github.com/JabRef/jabref-koppor/issues/764), draft [JabRef/jabref-koppor#786](https://github.com/JabRef/jabref-koppor/pull/786).
 
 ### Features that do not work in the native JabGui yet
 
-- Keyring on Linux (probably missing dbus-java metadata)
-- AI features (DJL cannot load the PyTorch native library)
-- LibreOffice integration
+- Keyring on Linux (probably missing dbus-java metadata).
+- AI features (DJL cannot load the PyTorch native library).
+- LibreOffice integration.
 
 ### Tests
 
-- Merge the JabGui smoke test ([#17545](https://github.com/JabRef/jabref/pull/17545)).
-- Open all 95 FXML views in a second native executable and examine the log.
-- Differential GUI tests: do the same steps on the JVM version and on the native binary, and compare the screenshots.
+- Finish the JabGui smoke test ([#17545](https://github.com/JabRef/jabref/pull/17545)).
+- Add a component test that opens all 95 FXML views in the native image. This makes sure that no view misses metadata.
+- Differential GUI tests with the JVM version as the [test oracle](https://en.wikipedia.org/wiki/Test_oracle): do the same steps on the JVM version and on the native binary, and compare the screenshots. This makes sure that both behave the same.
 
 ### Metadata, startup time and size
 
-- Remove hand-written entries that the GraalVM metadata repository now supplies, and give metadata back to the libraries (for example, Caffeine and lsp4j).
+- Remove hand-written entries that the GraalVM metadata repository now supplies, and give metadata back to the libraries (for example, Caffeine and lsp4j). The [JabKit how-to](https://devdocs.jabref.org/code-howtos/jabkit-native-image.html#the-big-picture) explains where the metadata comes from.
 - Make the JabKit initialization lazy. Most of the 2.1 seconds are used to create all web fetchers and formats at each start.
 - Remove unused code from JabSrv (Jackson 2.x, `java.desktop`, PostgreSQL driver).
 
@@ -257,6 +257,6 @@ I also thank:
 - [@ThiloteE](https://github.com/ThiloteE) for testing on a computer from 2014. With the native image, JabRef now opens on it in approximately 9 seconds. Before, it sometimes took 20 to 40 seconds.
 - [@subhramit](https://github.com/subhramit) for the help with my CV.
 
-When I had problems with my Payoneer payments, all of you gave me solutions and moral support. Thank you very much.
+When I had problems with my Payoneer payments, you all suggested solutions and gave me moral support. Thank you!
 
 This project also depends on many open-source projects. Special thanks to [Apache PDFBox](https://pdfbox.apache.org/) for the fast fixes, and to [StaticFX](https://github.com/HebiRobotics/jfx-static-feature), which made the native JabGui possible. Thanks also to [GraalVM](https://github.com/oracle/graal), [Native Build Tools](https://github.com/graalvm/native-build-tools), the [GraalVM reachability metadata repository](https://github.com/oracle/graalvm-reachability-metadata), [Liberica NIK](https://bell-sw.com/liberica-native-image-kit/), [picocli](https://github.com/remkop/picocli), [clitest](https://github.com/aureliojargas/clitest), [OculiX](https://github.com/oculix-org/Oculix) and [hyperfine](https://github.com/sharkdp/hyperfine).
